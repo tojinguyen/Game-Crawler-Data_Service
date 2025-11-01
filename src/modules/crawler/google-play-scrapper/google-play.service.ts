@@ -18,7 +18,7 @@ export class CrawlService {
   // Cron job chạy mỗi 0h (00:00)
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleCron() {
-    this.logger.log('🚀 Bắt đầu crawl dữ liệu Google Play...');
+    this.logger.log('🚀 Start crawl data from google play...');
 
     try {
       const result = await gplay.search({
