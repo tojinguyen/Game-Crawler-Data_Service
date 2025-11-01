@@ -1,6 +1,5 @@
-// modules/crawl/crawl.service.ts
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import gplay from 'google-play-scraper';
@@ -15,10 +14,9 @@ export class CrawlService {
     private readonly appRepo: Repository<App>,
   ) {}
 
-  // Cron job chạy mỗi 0h (00:00)
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron('*/10 * * * * *')
   async handleCron() {
-    this.logger.log('🚀 Start crawl data from google play...');
+    this.logger.log('🚀 Start crawl data from google play (every 10s)...');
 
     try {
       const result = await gplay.search({
@@ -28,17 +26,10 @@ export class CrawlService {
         lang: 'en',
       });
 
-      const apps = result.map((a) =>
-        this.appRepo.create({
-          appId: a.appId,
-          title: a.title,
-          developer: a.developer,
-          score: a.score,
-        }),
-      );
-
-      await this.appRepo.save(apps);
-      this.logger.log(`✅ Đã lưu ${apps.length} ứng dụng vào database.`);
+      this.logger.log(`✅ Found ${result.length} apps from Google Play.`);
+      if (result && result.length > 0) {
+        this.logger.log(JSON.stringify(result, null, 2));
+      }
     } catch (err) {
       this.logger.error('❌ Lỗi khi crawl dữ liệu:', err);
     }
