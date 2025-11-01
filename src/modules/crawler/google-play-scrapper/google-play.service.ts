@@ -1,18 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import gplay from 'google-play-scraper';
-import { App } from './app.entity';
 
 @Injectable()
 export class CrawlService {
   private readonly logger = new Logger(CrawlService.name);
 
-  constructor(
-    @InjectRepository(App)
-    private readonly appRepo: Repository<App>,
-  ) {}
+  constructor() {}
 
   @Cron('*/10 * * * * *')
   async handleCron() {
