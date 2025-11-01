@@ -10,7 +10,7 @@ async function bootstrap() {
     .setTitle('Game Crawler Data Service')
     .setDescription('API documentation for Google Play crawler')
     .setVersion('1.0')
-    .addTag('crawler')
+    .addTag('google-play')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
